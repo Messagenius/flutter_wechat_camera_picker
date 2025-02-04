@@ -8,6 +8,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../wechat_camera_picker.dart';
 import '../constants/config.dart';
 import '../internals/singleton.dart';
 import '../states/camera_picker_state.dart';
@@ -25,6 +26,7 @@ class CameraPicker extends StatefulWidget {
     this.pickerConfig = const CameraPickerConfig(),
     this.createPickerState,
     this.locale,
+    this.onXFileCaptured,
   });
 
   /// {@macro wechat_camera_picker.CameraPickerConfig}
@@ -37,6 +39,12 @@ class CameraPicker extends StatefulWidget {
   /// The [Locale] to determine text delegates for the picker.
   final Locale? locale;
 
+  final bool Function({
+    required XFile file,
+    required CameraPickerViewType viewType,
+    Duration? duration,
+  })? onXFileCaptured;
+
   /// Static method to create [AssetEntity] through camera.
   /// 通过相机创建 [AssetEntity] 的静态方法
   static Future<AssetEntity?> pickFromCamera(
@@ -47,11 +55,17 @@ class CameraPicker extends StatefulWidget {
     CameraPickerPageRoute<AssetEntity> Function(Widget picker)?
         pageRouteBuilder,
     Locale? locale,
+    bool Function({
+      required XFile file,
+      required CameraPickerViewType viewType,
+      Duration? duration,
+    })? onXFileCaptured,
   }) {
     final Widget picker = CameraPicker(
       pickerConfig: pickerConfig,
       createPickerState: createPickerState,
       locale: locale,
+      onXFileCaptured: onXFileCaptured,
     );
     return Navigator.of(
       context,

@@ -24,6 +24,14 @@ List<PickMethod> pickMethods(BuildContext context) {
       method: (BuildContext context) => CameraPicker.pickFromCamera(
         context,
         pickerConfig: const CameraPickerConfig(enableRecording: true),
+        onXFileCaptured: ({
+          required XFile file,
+          required CameraPickerViewType viewType,
+          Duration? duration,
+        }) {
+          print('onXFileCaptured: ${file.path}, $viewType, $duration');
+          return true;
+        },
       ),
     ),
     PickMethod(

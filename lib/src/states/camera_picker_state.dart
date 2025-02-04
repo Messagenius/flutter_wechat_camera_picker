@@ -262,7 +262,7 @@ class CameraPickerState extends State<CameraPicker>
     super.initState();
     ambiguate(WidgetsBinding.instance)?.addObserver(this);
     Singleton.textDelegate = widget.pickerConfig.textDelegate ??
-        cameraPickerTextDelegateFromLocale(widget.locale);
+        cameraPickerTextDelegateFromLocale(widget.locale ?? Locale('en', 'US'));
     initCameras();
     initAccelerometerSubscription();
   }
@@ -953,15 +953,26 @@ class CameraPickerState extends State<CameraPicker>
       if (isCapturedFileHandled ?? false) {
         return;
       }
-      final AssetEntity? entity = await pushToViewer(
-        file: file,
-        viewType: CameraPickerViewType.image,
-      );
-      if (entity != null) {
+      final dynamic entity = widget.onXFileCaptured != null
+          ? widget.onXFileCaptured!(
+              file: file,
+              viewType: CameraPickerViewType.image,
+            )
+          : await pushToViewer(
+              file: file,
+              viewType: CameraPickerViewType.image,
+            );
+      if (entity is AssetEntity || entity == true) {
         if (pickerConfig.onPickConfirmed case final onPickConfirmed?) {
-          onPickConfirmed(entity);
+          if (entity is AssetEntity) {
+            onPickConfirmed(entity);
+          } else {
+            return Navigator.of(context)
+                .pop(entity is AssetEntity ? entity : null);
+          }
         } else {
-          return Navigator.of(context).pop(entity);
+          return Navigator.of(context)
+              .pop(entity is AssetEntity ? entity : null);
         }
       }
       wrapControllerMethod<void>(
@@ -1090,16 +1101,27 @@ class CameraPickerState extends State<CameraPicker>
       if (isCapturedFileHandled ?? false) {
         return;
       }
-      final AssetEntity? entity = await pushToViewer(
-        file: file,
-        viewType: CameraPickerViewType.video,
-      );
-      if (entity != null) {
+      final dynamic entity = widget.onXFileCaptured != null
+          ? widget.onXFileCaptured!(
+              file: file,
+              viewType: CameraPickerViewType.image,
+            )
+          : await pushToViewer(
+              file: file,
+              viewType: CameraPickerViewType.video,
+            );
+      if (entity is AssetEntity || entity == true) {
         if (pickerConfig.onPickConfirmed case final onPickConfirmed?) {
           await innerController?.resumePreview();
-          onPickConfirmed(entity);
+          if (entity is AssetEntity) {
+            onPickConfirmed(entity);
+          } else {
+            return Navigator.of(context)
+                .pop(entity is AssetEntity ? entity : null);
+          }
         } else {
-          Navigator.of(context).pop(entity);
+          return Navigator.of(context)
+              .pop(entity is AssetEntity ? entity : null);
         }
       } else {
         await innerController?.resumePreview();
@@ -1923,19 +1945,21 @@ class CameraPickerState extends State<CameraPicker>
                   DeviceOrientation.landscapeLeft: Alignment.centerLeft,
                   DeviceOrientation.landscapeRight: Alignment.centerRight,
                 }[v.deviceOrientation]!,
-                child: AspectRatio(
-                  aspectRatio:
-                      v.deviceOrientation.toString().contains('portrait')
-                          ? 1 / v.aspectRatio
-                          : v.aspectRatio,
-                  child: LayoutBuilder(
-                    builder: (BuildContext c, BoxConstraints constraints) {
-                      return buildCameraPreview(
-                        context: c,
-                        cameraValue: v,
-                        constraints: constraints,
-                      );
-                    },
+                child: Center(
+                  child: AspectRatio(
+                    aspectRatio:
+                        v.deviceOrientation.toString().contains('portrait')
+                            ? 1 / v.aspectRatio
+                            : v.aspectRatio,
+                    child: LayoutBuilder(
+                      builder: (BuildContext c, BoxConstraints constraints) {
+                        return buildCameraPreview(
+                          context: c,
+                          cameraValue: v,
+                          constraints: constraints,
+                        );
+                      },
+                    ),
                   ),
                 ),
               );
