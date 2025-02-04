@@ -43,7 +43,7 @@ class CameraPicker extends StatefulWidget {
 
   final bool showGalleryButton;
 
-  final void Function()? onGalleryButtonPressed;
+  final void Function(BuildContext context)? onGalleryButtonPressed;
 
   /// Static method to create [AssetEntity] through camera.
   /// 通过相机创建 [AssetEntity] 的静态方法
@@ -61,7 +61,7 @@ class CameraPicker extends StatefulWidget {
       Duration? duration,
     })? onXFileCaptured,
     bool? showGalleryButton,
-    void Function()? onGalleryButtonPressed,
+    void Function(BuildContext context)? onGalleryButtonPressed,
   }) {
     final Widget picker = CameraPicker(
       pickerConfig: pickerConfig,

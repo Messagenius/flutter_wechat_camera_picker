@@ -1426,34 +1426,38 @@ class CameraPickerState extends State<CameraPicker>
                   color: Colors.grey.shade900.withValues(alpha: 0.6),
                   shape: const CircleBorder(),
                   child: InkWell(
-                    onTap: widget.onGalleryButtonPressed ??
-                        () async {
-                          final file = await ImagePicker().pickMedia();
-                          if (file != null) {
-                            const Set<String> videoExtensions = {
-                              'mp4',
-                              'mov',
-                              'avi',
-                              'wmv',
-                              'flv',
-                              'mpg',
-                              'mpeg',
-                              'mkv',
-                            };
-                            if (videoExtensions
-                                .contains(file.path.split('.').last)) {
-                              pickerConfig.onXFileCaptured?.call(
-                                file,
-                                CameraPickerViewType.video,
-                              );
-                            } else {
-                              pickerConfig.onXFileCaptured?.call(
-                                file,
-                                CameraPickerViewType.image,
-                              );
-                            }
-                          }
-                        },
+                    onTap: () async {
+                      if (widget.onGalleryButtonPressed != null) {
+                        widget.onGalleryButtonPressed!(context);
+                        return;
+                      }
+
+                      final file = await ImagePicker().pickMedia();
+                      if (file != null) {
+                        const Set<String> videoExtensions = {
+                          'mp4',
+                          'mov',
+                          'avi',
+                          'wmv',
+                          'flv',
+                          'mpg',
+                          'mpeg',
+                          'mkv',
+                        };
+                        if (videoExtensions
+                            .contains(file.path.split('.').last)) {
+                          pickerConfig.onXFileCaptured?.call(
+                            file,
+                            CameraPickerViewType.video,
+                          );
+                        } else {
+                          pickerConfig.onXFileCaptured?.call(
+                            file,
+                            CameraPickerViewType.image,
+                          );
+                        }
+                      }
+                    },
                     customBorder: const CircleBorder(),
                     child: Padding(
                       padding: const EdgeInsets.all(15),
