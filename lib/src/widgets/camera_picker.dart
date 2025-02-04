@@ -4,16 +4,10 @@
 
 import 'dart:async';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../wechat_camera_picker.dart';
-import '../constants/config.dart';
-import '../internals/singleton.dart';
-import '../states/camera_picker_state.dart';
-
-import 'camera_picker_page_route.dart';
 
 /// The camera picker widget.
 /// 拍照选择器。
@@ -27,6 +21,8 @@ class CameraPicker extends StatefulWidget {
     this.createPickerState,
     this.locale,
     this.onXFileCaptured,
+    this.showGalleryButton = false,
+    this.onGalleryButtonPressed,
   });
 
   /// {@macro wechat_camera_picker.CameraPickerConfig}
@@ -45,6 +41,10 @@ class CameraPicker extends StatefulWidget {
     Duration? duration,
   })? onXFileCaptured;
 
+  final bool showGalleryButton;
+
+  final void Function()? onGalleryButtonPressed;
+
   /// Static method to create [AssetEntity] through camera.
   /// 通过相机创建 [AssetEntity] 的静态方法
   static Future<AssetEntity?> pickFromCamera(
@@ -60,12 +60,16 @@ class CameraPicker extends StatefulWidget {
       required CameraPickerViewType viewType,
       Duration? duration,
     })? onXFileCaptured,
+    bool? showGalleryButton,
+    void Function()? onGalleryButtonPressed,
   }) {
     final Widget picker = CameraPicker(
       pickerConfig: pickerConfig,
       createPickerState: createPickerState,
       locale: locale,
       onXFileCaptured: onXFileCaptured,
+      showGalleryButton: showGalleryButton ?? false,
+      onGalleryButtonPressed: onGalleryButtonPressed,
     );
     return Navigator.of(
       context,

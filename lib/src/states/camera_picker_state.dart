@@ -14,6 +14,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:wechat_picker_library/wechat_picker_library.dart';
 
@@ -1418,7 +1419,56 @@ class CameraPickerState extends State<CameraPicker>
             ? VerticalDirection.up
             : VerticalDirection.down,
         children: <Widget>[
-          const Spacer(),
+          if (widget.showGalleryButton)
+            Expanded(
+              child: Center(
+                child: Material(
+                  color: Colors.grey.shade900.withValues(alpha: 0.6),
+                  shape: const CircleBorder(),
+                  child: InkWell(
+                    onTap: widget.onGalleryButtonPressed ??
+                        () async {
+                          final file = await ImagePicker().pickMedia();
+                          if (file != null) {
+                            const Set<String> videoExtensions = {
+                              'mp4',
+                              'mov',
+                              'avi',
+                              'wmv',
+                              'flv',
+                              'mpg',
+                              'mpeg',
+                              'mkv',
+                            };
+                            if (videoExtensions
+                                .contains(file.path.split('.').last)) {
+                              pickerConfig.onXFileCaptured?.call(
+                                file,
+                                CameraPickerViewType.video,
+                              );
+                            } else {
+                              pickerConfig.onXFileCaptured?.call(
+                                file,
+                                CameraPickerViewType.image,
+                              );
+                            }
+                          }
+                        },
+                    customBorder: const CircleBorder(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Icon(
+                        Icons.photo_library_outlined,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          else
+            const Spacer(),
           Expanded(
             child: Center(
               child: buildCaptureButton(context, constraints),
@@ -1507,9 +1557,10 @@ class CameraPickerState extends State<CameraPicker>
                       ),
                       shape: BoxShape.circle,
                     ),
-                    child: const DecoratedBox(
+                    child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color:
+                            isCaptureButtonTapDown ? Colors.red : Colors.white,
                         shape: BoxShape.circle,
                       ),
                     ),
