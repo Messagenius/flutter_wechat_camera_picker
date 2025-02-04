@@ -1104,7 +1104,8 @@ class CameraPickerState extends State<CameraPicker>
       final dynamic entity = widget.onXFileCaptured != null
           ? widget.onXFileCaptured!(
               file: file,
-              viewType: CameraPickerViewType.image,
+              viewType: CameraPickerViewType.video,
+              duration: recordStopwatch.elapsed,
             )
           : await pushToViewer(
               file: file,
