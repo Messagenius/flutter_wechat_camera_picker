@@ -35,7 +35,7 @@ class CameraPicker extends StatefulWidget {
   /// The [Locale] to determine text delegates for the picker.
   final Locale? locale;
 
-  final bool Function({
+  final Future<bool> Function({
     required XFile file,
     required CameraPickerViewType viewType,
     Duration? duration,
@@ -55,7 +55,7 @@ class CameraPicker extends StatefulWidget {
     CameraPickerPageRoute<AssetEntity> Function(Widget picker)?
         pageRouteBuilder,
     Locale? locale,
-    bool Function({
+    Future<bool> Function({
       required XFile file,
       required CameraPickerViewType viewType,
       Duration? duration,

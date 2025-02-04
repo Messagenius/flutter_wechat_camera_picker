@@ -29,7 +29,7 @@ List<PickMethod> pickMethods(BuildContext context) {
           required XFile file,
           required CameraPickerViewType viewType,
           Duration? duration,
-        }) {
+        }) async {
           print('onXFileCaptured: ${file.path}, $viewType, $duration');
           return true;
         },

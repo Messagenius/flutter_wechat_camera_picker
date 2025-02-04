@@ -955,7 +955,7 @@ class CameraPickerState extends State<CameraPicker>
         return;
       }
       final dynamic entity = widget.onXFileCaptured != null
-          ? widget.onXFileCaptured!(
+          ? await widget.onXFileCaptured!(
               file: file,
               viewType: CameraPickerViewType.image,
             )
@@ -1103,7 +1103,7 @@ class CameraPickerState extends State<CameraPicker>
         return;
       }
       final dynamic entity = widget.onXFileCaptured != null
-          ? widget.onXFileCaptured!(
+          ? await widget.onXFileCaptured!(
               file: file,
               viewType: CameraPickerViewType.video,
               duration: recordStopwatch.elapsed,
