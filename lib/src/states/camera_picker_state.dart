@@ -1498,7 +1498,10 @@ class CameraPickerState extends State<CameraPicker>
   /// 返回键
   Widget buildBackButton(BuildContext context) {
     return IconButton(
-      onPressed: () => Navigator.of(context).maybePop(),
+      onPressed: () {
+        widget.onBack?.call();
+        Navigator.of(context).maybePop();
+      },
       tooltip: MaterialLocalizations.of(context).backButtonTooltip,
       icon: const Icon(Icons.clear),
     );
@@ -2100,17 +2103,23 @@ class CameraPickerState extends State<CameraPicker>
         ),
       );
     }
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        systemNavigationBarIconBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
-      child: Theme(
-        data: theme,
-        child: Material(
-          color: Colors.black,
-          child: body,
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (_, __) {
+        widget.onBack?.call();
+      },
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
+        child: Theme(
+          data: theme,
+          child: Material(
+            color: Colors.black,
+            child: body,
+          ),
         ),
       ),
     );

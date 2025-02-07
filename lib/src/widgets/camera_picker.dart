@@ -23,6 +23,7 @@ class CameraPicker extends StatefulWidget {
     this.onXFileCaptured,
     this.showGalleryButton = false,
     this.onGalleryButtonPressed,
+    this.onBack,
   });
 
   /// {@macro wechat_camera_picker.CameraPickerConfig}
@@ -45,6 +46,8 @@ class CameraPicker extends StatefulWidget {
 
   final void Function(BuildContext context)? onGalleryButtonPressed;
 
+  final void Function()? onBack;
+
   /// Static method to create [AssetEntity] through camera.
   /// 通过相机创建 [AssetEntity] 的静态方法
   static Future<AssetEntity?> pickFromCamera(
@@ -62,6 +65,7 @@ class CameraPicker extends StatefulWidget {
     })? onXFileCaptured,
     bool? showGalleryButton,
     void Function(BuildContext context)? onGalleryButtonPressed,
+    void Function()? onBack,
   }) {
     final Widget picker = CameraPicker(
       pickerConfig: pickerConfig,
@@ -70,6 +74,7 @@ class CameraPicker extends StatefulWidget {
       onXFileCaptured: onXFileCaptured,
       showGalleryButton: showGalleryButton ?? false,
       onGalleryButtonPressed: onGalleryButtonPressed,
+      onBack: onBack,
     );
     return Navigator.of(
       context,
