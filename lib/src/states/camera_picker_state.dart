@@ -1499,8 +1499,7 @@ class CameraPickerState extends State<CameraPicker>
   Widget buildBackButton(BuildContext context) {
     return IconButton(
       onPressed: () {
-        widget.onBack?.call();
-        Navigator.of(context).maybePop();
+        Navigator.of(context).pop();
       },
       tooltip: MaterialLocalizations.of(context).backButtonTooltip,
       icon: const Icon(Icons.clear),
