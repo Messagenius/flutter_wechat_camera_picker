@@ -13,7 +13,7 @@ that can be found in the LICENSE file. -->
 [![GitHub stars](https://img.shields.io/github/stars/fluttercandies/flutter_wechat_camera_picker?logo=github&style=flat-square)](https://github.com/fluttercandies/flutter_wechat_camera_picker/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/fluttercandies/flutter_wechat_camera_picker?logo=github&style=flat-square)](https://github.com/fluttercandies/flutter_wechat_camera_picker/network)
 
-[![Flutter Candies QQ群](https://pub.idqqimg.com/wpa/images/group.png)](https://jq.qq.com/?_wv=1027&k=5bcc0gy)
+<a href="https://qm.qq.com/q/ZyJbSVjfSU"><img src="https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffluttercandies%2F.github%2Frefs%2Fheads%2Fmain%2Fdata.yml&query=%24.qq_group_number&label=QQ%E7%BE%A4&logo=qq&style=flat&color=1DACE8" /></a>
 
 Language: [English](README.md) | 中文
 
@@ -30,11 +30,11 @@ Language: [English](README.md) | 中文
 该插件仅保证能与 **stable 渠道的 Flutter SDK** 配合使用。
 我们不会为其他渠道的 Flutter SDK 做实时支持。
 
-|        | 2.8.0 | 3.3.0 | 3.16.0 |
-|--------|:-----:|:-----:|:------:|
-| 4.2.0+ |   ❌   |   ❌   |   ✅    |
-| 4.0.0+ |   ❌   |   ✅   |   ❌    |
-| 3.0.0+ |   ✅   |   ❌   |   ❌    |
+|        | 3.3.0 | 3.16.0 | 3.22.0 |
+|--------|:-----:|:------:|:------:|
+| 4.4.0+ |   ❌   |   ✅    |   ✅    |
+| 4.2.0+ |   ❌   |   ✅    |   ❌    |
+| 4.0.0+ |   ✅   |   ❌    |   ❌    |
 
 ## 主要使用的 package
 
@@ -136,7 +136,7 @@ dependencies:
 
 运行前，按照这些步骤逐一配置：
 - [wechat_assets_picker#准备工作](https://github.com/fluttercandies/flutter_wechat_assets_picker/blob/master/README-ZH.md#preparing-for-use-)
-- [camera#installation](https://pub.flutter-io.cn/packages/camera#installation)
+- [camera#setup](https://pub.flutter-io.cn/packages/camera#setup)
 
 在你的代码中导入：
 

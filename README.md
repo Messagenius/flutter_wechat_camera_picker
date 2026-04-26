@@ -13,7 +13,7 @@ that can be found in the LICENSE file. -->
 [![GitHub stars](https://img.shields.io/github/stars/fluttercandies/flutter_wechat_camera_picker?logo=github&style=flat-square)](https://github.com/fluttercandies/flutter_wechat_camera_picker/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/fluttercandies/flutter_wechat_camera_picker?logo=github&style=flat-square)](https://github.com/fluttercandies/flutter_wechat_camera_picker/network)
 
-[![Flutter Candies QQ群](https://pub.idqqimg.com/wpa/images/group.png)](https://jq.qq.com/?_wv=1027&k=5bcc0gy)
+<a href="https://qm.qq.com/q/ZyJbSVjfSU"><img src="https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffluttercandies%2F.github%2Frefs%2Fheads%2Fmain%2Fdata.yml&query=%24.qq_group_number&label=QQ%E7%BE%A4&logo=qq&style=flat&color=1DACE8" /></a>
 
 Language: English | [中文](README-ZH.md)
 
@@ -31,11 +31,11 @@ See the [Migration Guide][] to learn how to migrate between breaking changes.
 The package only guarantees that it will work on **the stable version of Flutter**.
 We won't update it in real-time to align with other channels of Flutter.
 
-|        | 2.8.0 | 3.3.0 | 3.16.0 |
-|--------|:-----:|:-----:|:------:|
-| 4.2.0+ |   ❌   |   ❌   |   ✅    |
-| 4.0.0+ |   ❌   |   ✅   |   ❌    |
-| 3.0.0+ |   ✅   |   ❌   |   ❌    |
+|        | 3.3.0 | 3.16.0 | 3.22.0 |
+|--------|:-----:|:------:|:------:|
+| 4.4.0+ |   ❌   |   ✅    |   ✅    |
+| 4.2.0+ |   ❌   |   ✅    |   ❌    |
+| 4.0.0+ |   ✅   |   ❌    |   ❌    |
 
 ## Package credits
 
@@ -140,7 +140,7 @@ The latest **dev** version is:
 
 Follow these detailed setup guide before runs:
 - [wechat_assets_picker#preparing-for-use](https://github.com/fluttercandies/flutter_wechat_assets_picker#preparing-for-use-)
-- [camera#installation](https://pub.dev/packages/camera#installation)
+- [camera#setup](https://pub.dev/packages/camera#setup)
 
 #### Notes 📝
 

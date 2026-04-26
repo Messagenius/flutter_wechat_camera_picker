@@ -14,7 +14,7 @@ import '../states/camera_picker_viewer_state.dart';
 
 class CameraPickerViewer extends StatefulWidget {
   const CameraPickerViewer._({
-    // ignore: unused_element
+    // ignore: unused_element, unused_element_parameter
     super.key,
     required this.viewType,
     required this.previewXFile,
@@ -41,6 +41,7 @@ class CameraPickerViewer extends StatefulWidget {
   /// 跳转至选择预览的静态方法
   static Future<AssetEntity?> pushToViewer(
     BuildContext context, {
+    Key? key,
     required CameraPickerConfig pickerConfig,
     required CameraPickerViewType viewType,
     required XFile previewXFile,
@@ -53,6 +54,7 @@ class CameraPickerViewer extends StatefulWidget {
     ).push<AssetEntity?>(
       PageRouteBuilder<AssetEntity?>(
         pageBuilder: (_, __, ___) => CameraPickerViewer._(
+          key: key,
           viewType: viewType,
           previewXFile: previewXFile,
           pickerConfig: pickerConfig,
