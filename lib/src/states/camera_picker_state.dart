@@ -1063,11 +1063,10 @@ class CameraPickerState extends State<CameraPicker> with WidgetsBindingObserver 
     });
     try {
       final XFile file = await controller.stopVideoRecording();
+      controller.pausePreview();
       if (recordStopwatch.elapsed < minimumRecordingDuration) {
         pickerConfig.onMinimumRecordDurationNotMet?.call();
-        return;
       }
-      controller.pausePreview();
       final bool? isCapturedFileHandled = pickerConfig.onXFileCaptured?.call(
         file,
         CameraPickerViewType.video,
@@ -1102,6 +1101,9 @@ class CameraPickerState extends State<CameraPicker> with WidgetsBindingObserver 
     } catch (e, s) {
       recordCountdownTimer?.cancel();
       initCameras();
+      if (mounted) {
+        Navigator.of(context).pop(null);
+      }
       handleErrorWithHandler(e, s, pickerConfig.onError);
     } finally {
       safeSetState(() {
