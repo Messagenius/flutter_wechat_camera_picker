@@ -225,6 +225,11 @@ class CameraPickerState extends State<CameraPicker> with WidgetsBindingObserver 
   /// The locked capture orientation of the current camera instance.
   DeviceOrientation? lockedCaptureOrientation;
 
+  /// Pending orientation candidate while debouncing accelerometer events.
+  DeviceOrientation? _pendingOrientation;
+  DateTime? _pendingOrientationSince;
+  static const Duration _orientationDebounce = Duration(milliseconds: 300);
+
   /// The calculated capture actions section height.
   double? lastCaptureActionsEffectiveHeight;
 
@@ -559,28 +564,54 @@ class CameraPickerState extends State<CameraPicker> with WidgetsBindingObserver 
       return;
     }
     final x = event.x, y = event.y, z = event.z;
+    final ax = x.abs(), ay = y.abs(), az = z.abs();
+
+    // Ignore weak gravity signals (e.g. device lying flat on a table).
+    const double kMinGravity = 3.0;
+    // Require the dominant axis to be clearly stronger than the runner-up to
+    // avoid flipping orientation near the 45-degree boundary.
+    const double kDominanceFactor = 1.5;
+
     final DeviceOrientation? newOrientation;
-    if (x.abs() > y.abs() && x.abs() > z.abs()) {
-      if (x > 0) {
-        newOrientation = DeviceOrientation.landscapeLeft;
-      } else {
-        newOrientation = DeviceOrientation.landscapeRight;
-      }
-    } else if (y.abs() > x.abs() && y.abs() > z.abs()) {
-      if (y > 0) {
-        newOrientation = DeviceOrientation.portraitUp;
-      } else {
-        newOrientation = DeviceOrientation.portraitDown;
-      }
+    if (ax > ay * kDominanceFactor && ax > az && ax > kMinGravity) {
+      newOrientation = x > 0
+          ? DeviceOrientation.landscapeLeft
+          : DeviceOrientation.landscapeRight;
+    } else if (ay > ax * kDominanceFactor && ay > az && ay > kMinGravity) {
+      newOrientation = y > 0
+          ? DeviceOrientation.portraitUp
+          : DeviceOrientation.portraitDown;
     } else {
       newOrientation = null;
     }
-    // Throttle.
-    if (newOrientation != null && lockedCaptureOrientation != newOrientation) {
-      lockedCaptureOrientation = newOrientation;
-      realDebugPrint('Locking new capture orientation: $newOrientation');
-      controller.lockCaptureOrientation(newOrientation);
+
+    // If there is no clear orientation or it matches the current one, reset
+    // any pending candidate and bail out.
+    if (newOrientation == null || newOrientation == lockedCaptureOrientation) {
+      _pendingOrientation = null;
+      _pendingOrientationSince = null;
+      return;
     }
+
+    // Debounce: the candidate must remain stable for [_orientationDebounce]
+    // before it is actually applied, preventing transient spikes from locking
+    // the wrong orientation.
+    final now = DateTime.now();
+    if (_pendingOrientation != newOrientation) {
+      _pendingOrientation = newOrientation;
+      _pendingOrientationSince = now;
+      return;
+    }
+
+    if (now.difference(_pendingOrientationSince!) < _orientationDebounce) {
+      return;
+    }
+
+    lockedCaptureOrientation = newOrientation;
+    _pendingOrientation = null;
+    _pendingOrientationSince = null;
+    realDebugPrint('Locking new capture orientation: $newOrientation');
+    controller.lockCaptureOrientation(newOrientation);
   }
 
   /// Initializes the flash modes in [validFlashModes] for each
@@ -1928,6 +1959,10 @@ class CameraPickerState extends State<CameraPicker> with WidgetsBindingObserver 
     final orientation = lockedCaptureOrientation ??
         deviceOrientation ??
         MediaQuery.orientationOf(context);
+        print('deviceOrientation: $deviceOrientation');
+        print('lockedCaptureOrientation: $lockedCaptureOrientation');
+        print('MediaQuery.orientationOf(context): ${MediaQuery.orientationOf(context)}');
+        print('orientation: $orientation');
     final isPortrait = orientation.toString().contains('portrait');
     return SafeArea(
       bottom: false,
