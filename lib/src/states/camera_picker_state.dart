@@ -556,7 +556,11 @@ class CameraPickerState extends State<CameraPicker> with WidgetsBindingObserver 
   void handleAccelerometerEvent(AccelerometerEvent event) {
     if (!mounted ||
         innerController == null ||
-        lockedCaptureOrientation != null ||
+        // Only skip auto-detection when the user explicitly locked the capture
+        // orientation. Using the runtime [lockedCaptureOrientation] here would
+        // permanently freeze on the first detected orientation, since this
+        // handler is what assigns it — breaking rotation tracking below.
+        pickerConfig.lockCaptureOrientation != null ||
         !controller.value.isInitialized ||
         controller.value.isPreviewPaused ||
         controller.value.isRecordingVideo ||
@@ -1959,10 +1963,6 @@ class CameraPickerState extends State<CameraPicker> with WidgetsBindingObserver 
     final orientation = lockedCaptureOrientation ??
         deviceOrientation ??
         MediaQuery.orientationOf(context);
-        print('deviceOrientation: $deviceOrientation');
-        print('lockedCaptureOrientation: $lockedCaptureOrientation');
-        print('MediaQuery.orientationOf(context): ${MediaQuery.orientationOf(context)}');
-        print('orientation: $orientation');
     final isPortrait = orientation.toString().contains('portrait');
     return SafeArea(
       bottom: false,
@@ -2150,8 +2150,8 @@ class CameraPickerState extends State<CameraPicker> with WidgetsBindingObserver 
 }
 
 class _VideoDuration extends StatefulWidget {
+  const _VideoDuration({required this.duration});
   final Duration duration;
-  const _VideoDuration({super.key, required this.duration});
 
   @override
   State<_VideoDuration> createState() => __VideoDurationState();
