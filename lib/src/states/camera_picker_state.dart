@@ -597,6 +597,22 @@ class CameraPickerState extends State<CameraPicker> with WidgetsBindingObserver 
       return;
     }
 
+    // Follow the device (OS) orientation, not the raw physical orientation.
+    // The accelerometer always reports how the device is physically held, even
+    // when the user has locked auto-rotation (e.g. portrait lock). The OS only
+    // rotates the app when auto-rotation is allowed, which is reflected by
+    // [MediaQuery.orientationOf]. If the detected physical orientation does not
+    // match the OS orientation, rotation is locked and we must not rotate the
+    // capture/preview to match the phone's physical position.
+    final Orientation uiOrientation = MediaQuery.orientationOf(context);
+    final bool newIsPortrait = newOrientation == DeviceOrientation.portraitUp ||
+        newOrientation == DeviceOrientation.portraitDown;
+    if (newIsPortrait != (uiOrientation == Orientation.portrait)) {
+      _pendingOrientation = null;
+      _pendingOrientationSince = null;
+      return;
+    }
+
     // Debounce: the candidate must remain stable for [_orientationDebounce]
     // before it is actually applied, preventing transient spikes from locking
     // the wrong orientation.
