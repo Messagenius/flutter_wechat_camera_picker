@@ -10,5 +10,5 @@ final class Singleton {
   const Singleton._();
 
   static CameraPickerTextDelegate textDelegate =
-      const CameraPickerTextDelegate();
+      const EnglishCameraPickerTextDelegate();
 }
